@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.IO;
+using System.Linq;
 
 namespace RegistroCorreos
 {
@@ -64,11 +62,12 @@ namespace RegistroCorreos
             Console.Clear();
 
             string archivo = Path.Combine(rutaArchivo, nombreArchivo);
-
             string encabezado = String.Empty;
-            string separador = new string('-', 80);
 
+            string separador = new string('-', 80);
             int idx = 0;
+            int ln = 0;
+            const int MAX_LN = 20;
 
             using (StreamReader reader = new StreamReader(archivo))
             {
@@ -83,13 +82,15 @@ namespace RegistroCorreos
                     }
                     else
                     {
-                        if ((idx % 24) != 0)
+                        if (ln <= MAX_LN)
                             Console.WriteLine("{0}{1}{2}{3}", idx.ToString().PadRight(6), valor[0].PadRight(25), valor[1].PadRight(25), valor[2].PadRight(30));
                         else
                         {
                             Console.WriteLine(separador);
                             Console.Write("Presione [Enter] para continuar... ");
                             Console.ReadLine();
+
+                            ln = 1;
 
                             Console.Clear();
                             Console.WriteLine("{0}", encabezado);
@@ -98,6 +99,7 @@ namespace RegistroCorreos
                         }
                     }
                     idx++;
+                    ln++;
                 }
             }
 
@@ -164,6 +166,9 @@ namespace RegistroCorreos
                 List<string> lineas = File.ReadAllLines(archivo).ToList();
                 lineas.RemoveAt(indice);
                 File.WriteAllLines(archivo, lineas);
+
+                Console.WriteLine("\n ** Registro borrado **");
+                Console.ReadKey();
             }
         }
 
